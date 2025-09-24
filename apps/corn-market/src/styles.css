@@ -2,3 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 /* You can add global styles to this file, and also import other style files */
+
+.StoreWrapper
+{
+    border: 1px solid greenyellow;
+    border-radius: 6px;
+    align-items: center;
+    background: #00DD00;
+}
