@@ -4,62 +4,37 @@ import {
   useContext,
   useState,
   Dispatch,
-  SetStateAction,
-  useEffect,
 } from 'react';
-// import { addCard, getCards } from '../../services/card-services';
-import { Corn } from '../../types/general-types';
+import { buyCorn } from '../../services/corn-services';
 
 type CornContextType = {
-  card: Corn;
-  cardsList: Corn[];
-  setCard: Dispatch<SetStateAction<Corn>>;
-  saveCard: Dispatch<Corn>;
+  cornsPurchased: number;
+  purchaseCorn: Dispatch<null>;
 };
 
 const cornContext = createContext<CornContextType>({
-  card: {
-    cardNumber: '',
-    expirationDate: '',
-    ownerName: '',
-    cvv: '',
-  },
-  cardsList: [],
-  setCard: () => {
-    throw new Error('setCard must be used within a CardContextProvider');
-  },
-  saveCard: () => {
-    throw new Error('setCard must be used within a CardContextProvider');
+  cornsPurchased: 0,
+  purchaseCorn: () => {
+    throw new Error('buyCorn must be used within a CardContextProvider');
   },
 });
 
 export function CornContextProvider({ children }: PropsWithChildren) {
-  const [card, setCard] = useState<Corn>({
-    cardNumber: '123456789123458',
-    expirationDate: '12/30',
-    ownerName: 'Ezequiel Garcia SII TEST',
-    cvv: '123',
-  });
+  const [cornsPurchased, setCornsPurchased] = useState<number>(0);
 
-  const [cardsList, setCardsList] = useState<Corn[]>([]);
-
-  const saveCard = (values: Corn) => {
-    // addCard(values).then(() => fetchCards());
-  };
-  const fetchCards = async () => {
+  const purchaseCorn = async () => {
+    let response;
     try {
-      const corns = []; ///await getCards();
-      setCardsList((corns || []).reverse());
+      response = await buyCorn();
+      if (response) {
+        setCornsPurchased((prev) => prev + 1);
+      }
     } catch (error) {
-      console.error('Error al obtener tarjetas:', error);
+      console.error('Error while buying a corn', error);
     }
   };
-  useEffect(() => {
-    fetchCards();
-  }, []);
-
   return (
-    <cornContext.Provider value={{ card, cardsList, setCard, saveCard }}>
+    <cornContext.Provider value={{ cornsPurchased, purchaseCorn }}>
       {children}
     </cornContext.Provider>
   );

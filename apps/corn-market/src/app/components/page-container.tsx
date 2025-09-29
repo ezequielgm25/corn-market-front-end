@@ -4,7 +4,7 @@ import Store from './store/store';
 
 export function PageContainer() {
   return (
-    <div className="wrapper flex items-center justify-center min-h-screen">
+    <div className="wrapper flex justify-center min-h-screen">
       <CornContextProvider>
         <div className="flex flex-col items-center gap-10">
           <Store />
